@@ -8,12 +8,15 @@ import {
 	DeploymentStatusEnum,
 	Deployment,
 } from "@spheron/site";
-import { ChildProcess } from "child_process";
 
 const token =
 	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlLZXkiOiI4MGM0YTYxYWYwMWI3NzBkMDAyN2I3MDUxMDdjZDg1NWMzYTVhMmJmMjE4ZTE4NTAwMmE2YjEyNmUwN2Y0MTA3NjhjYzMxNWMxODE2YjM2NDg3NzZmZWJjOGIxNDI2MTQ4OTE1MzcwMTY1YmI1OWYyNGY1ZTVlNWZiZGFhNmQ0ZiIsImlhdCI6MTY5Nzc4NTQ4OCwiaXNzIjoid3d3LnNwaGVyb24ubmV0d29yayJ9.mKYo8La_Ui4K9KI5Opvn0biTR-kLcuMjFJEcVmI9vNI";
 
 const spheronClient = new SpheronClient({ token });
+
+const getDeploymentUrl = async (deploymentId: string) => {
+	return await spheronClient.deployments.get(deploymentId);
+};
 
 const frameworkMapping = {
 	SIMPLE_JAVASCRIPT_APP: FrameworkEnum.SIMPLE_JAVASCRIPT_APP,
@@ -142,8 +145,6 @@ export function activate(context: vscode.ExtensionContext) {
 		"sphede.getDeployments",
 		async () => {
 			const projectId = context.workspaceState.get<string>("projectId");
-			console.log("projectId", projectId);
-			vscode.window.showInformationMessage(`Project ID: ${projectId}`);
 
 			if (!projectId) {
 				vscode.window.showErrorMessage("Project Not yet deployed.");
@@ -172,16 +173,55 @@ export function activate(context: vscode.ExtensionContext) {
 						if (deployments.length === 0) {
 							vscode.window.showInformationMessage("No deployments found.");
 						} else {
-							const deploymentInfo = deployments.map((deployment, index) => {
-								return `${index + 1}. Deployment ID: ${
-									deployment.id
-								}, Status: ${deployment.status}`;
-							});
+							const deploymentInfo = [];
+							for (let index = 0; index < deployments.length; index++) {
+								const deployment = deployments[index];
+
+								if (deployment.status === DeploymentStatusEnum.DEPLOYED) {
+									let url = await getDeploymentUrl(deployment.id);
+									deploymentInfo.push({
+										deployment,
+										deployedUrl: url.sitePreview,
+									});
+								} else {
+									deploymentInfo.push({
+										deployment,
+									});
+								}
+							}
 
 							// Display deployments as an information message
-							vscode.window.showInformationMessage(deploymentInfo.join("\n"));
+							deploymentInfo.forEach(async (deployment, index) => {
+								if (
+									deployment.deployment.status === DeploymentStatusEnum.DEPLOYED
+								) {
+									// show Open Link button
+									const openLinkItem: vscode.MessageItem = {
+										title: "Open Link",
+									};
 
-							console.log(deploymentInfo);
+									const choice = await vscode.window.showInformationMessage(
+										`${index + 1}: ` +
+											`Deployment ID: ${deployment.deployment.id}, URL: ${deployment.deployedUrl}`,
+										openLinkItem
+									);
+
+									if (choice === openLinkItem) {
+										// Handle opening the URL here, e.g., open in a web browser.
+										if (deployment.deployedUrl) {
+											vscode.env.openExternal(
+												vscode.Uri.parse(deployment.deployedUrl)
+											);
+										}
+									}
+								} else {
+									// show only deployment id
+									vscode.window.showInformationMessage(
+										`${index + 1}: ` +
+											`Deployment ID: ${deployment.deployment.id}`
+									);
+								}
+							});
 						}
 					} catch (error) {
 						vscode.window.showErrorMessage(

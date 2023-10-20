@@ -9,14 +9,19 @@ const fs = require("fs");
 
 async function main() {
   const JobPortal = await hre.ethers.getContractFactory("JobPortal");
+  const Kaamify = await hre.ethers.getContractFactory("xKaam");
 
   const jobPortal = await JobPortal.deploy();
 
+  const cap = ethers.utils.parseEther("1000000000");
+  const kaamify = await Kaamify.deploy(cap);
+
   await jobPortal.deployed();
+  await kaamify.deployed();
 
   fs.writeFileSync(
     "./config.js",
-    `export const contractAddress = "${jobPortal.address}";`
+    `export const contractAddress = "${jobPortal.address}";\nexport const kaamifyAddress = "${kaamify.address}";`
   );
 
 }
