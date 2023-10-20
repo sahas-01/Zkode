@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "sphede.helloWorld",
-        "title": "Hello World"
+        "command": "sphede",
+        "title": "Deloy to spheron network"
       }
     ]
   },
