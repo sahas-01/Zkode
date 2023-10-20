@@ -3,7 +3,7 @@ require("@nomicfoundation/hardhat-toolbox");
 /** @type import('hardhat/config').HardhatUserConfig */
 require("dotenv").config();
 
-const { API_URL, PRIVATE_KEY, API_KEY } = process.env;
+const { API_URL, PRIVATE_KEY ,API_KEY } = process.env;
 
 
 // module.exports = {
@@ -20,7 +20,7 @@ const { API_URL, PRIVATE_KEY, API_KEY } = process.env;
 //   },
 // };
 module.exports = {
-  solidity: "0.8.17",
+  solidity: "0.8.20",
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
@@ -34,7 +34,7 @@ module.exports = {
     // },
     goerli: {
       url: `https://eth-goerli.g.alchemy.com/v2/${API_KEY}`,
-      accounts: [PRIVATE_KEY],
+			accounts: [PRIVATE_KEY],
     },
   },
   // etherscan: {
