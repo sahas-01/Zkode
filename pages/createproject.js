@@ -68,7 +68,7 @@ export default function CreateProject() {
 
 
             // send notification to the manager
-            await sendNotif([await signer.getAddress()], `Project ${title} is added to PeerTask!`, `Project ${title} is now available for developers `)
+            await sendNotif([await signer.getAddress()], `Project ${title} is added to Kaamify!`, `Project ${title} is now available for developers `)
             toast.success("Project created!");
             Router.push('/myprojects')
             // console.log("Project created!");
