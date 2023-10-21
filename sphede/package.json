@@ -20,6 +20,10 @@
 			{
 				"command": "sphede.getDeployments",
 				"title": "Get Deployments"
+			},
+			{
+				"command": "sphede.backup",
+				"title": "Backup and store on Spheron Network"
 			}
 		]
 	},
@@ -33,7 +37,7 @@
 	},
 	"devDependencies": {
 		"@types/mocha": "^10.0.2",
-		"@types/node": "18.x",
+		"@types/node": "^18.18.6",
 		"@types/vscode": "^1.83.0",
 		"@typescript-eslint/eslint-plugin": "^6.7.3",
 		"@typescript-eslint/parser": "^6.7.3",
@@ -45,6 +49,10 @@
 		"typescript": "^5.2.2"
 	},
 	"dependencies": {
-		"@spheron/site": "^1.0.2"
+		"@spheron/browser-upload": "^2.0.1",
+		"@spheron/site": "^1.0.2",
+		"@spheron/storage": "^2.0.3",
+		"dotenv": "^16.3.1",
+		"ipfs-http-client": "^60.0.1"
 	}
 }

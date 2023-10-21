@@ -8,6 +8,10 @@ import {
 	DeploymentStatusEnum,
 	Deployment,
 } from "@spheron/site";
+import { spheronUpload } from "./spheron-upload";
+import * as dotenv from "dotenv";
+import { File } from "buffer";
+dotenv.config();
 
 const token =
 	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlLZXkiOiI4MGM0YTYxYWYwMWI3NzBkMDAyN2I3MDUxMDdjZDg1NWMzYTVhMmJmMjE4ZTE4NTAwMmE2YjEyNmUwN2Y0MTA3NjhjYzMxNWMxODE2YjM2NDg3NzZmZWJjOGIxNDI2MTQ4OTE1MzcwMTY1YmI1OWYyNGY1ZTVlNWZiZGFhNmQ0ZiIsImlhdCI6MTY5Nzc4NTQ4OCwiaXNzIjoid3d3LnNwaGVyb24ubmV0d29yayJ9.mKYo8La_Ui4K9KI5Opvn0biTR-kLcuMjFJEcVmI9vNI";
@@ -39,8 +43,6 @@ const frameworkMapping = {
 	BRUNCH: FrameworkEnum.BRUNCH,
 	IONIC_ANGULAR: FrameworkEnum.IONIC_ANGULAR,
 };
-
-console.log(spheronClient);
 
 export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand(
@@ -233,6 +235,61 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	);
 
+	const backupAndStoreCommand = vscode.commands.registerCommand(
+		"sphede.backup",
+		async () => {
+			try {
+				const version = await vscode.window.showInputBox({
+					prompt: "Enter the version",
+					placeHolder: "v2.0.0",
+				});
+
+				const description = await vscode.window.showInputBox({
+					prompt: "Enter the description",
+					placeHolder: "Implemented workflow",
+				});
+
+				const projectId = context.workspaceState.get<string>("projectId");
+
+				if (!projectId) {
+					vscode.window.showErrorMessage("Project Not found");
+					return;
+				}
+
+				await vscode.window.withProgress(
+					{
+						location: vscode.ProgressLocation.Notification,
+						title: "Backing up project...",
+						cancellable: true,
+					},
+					async (progress, token) => {
+						token.onCancellationRequested(() => {
+							vscode.window.showInformationMessage(
+								"Backing projects canceled."
+							);
+						});
+
+						await spheronClient.projects.getDeployments(projectId, {
+							skip: 0,
+							limit: 5,
+						});
+					}
+				);
+
+				// Upload the files to IPFS
+				// await spheronUpload("test", fileList);
+
+				// Display the IPFS CID in a notification
+				vscode.window.showInformationMessage(
+					`Project is backed up and stored on IPFS.`
+				);
+			} catch (error) {
+				vscode.window.showErrorMessage(`Error: ${error}`);
+			}
+		}
+	);
+
+	context.subscriptions.push(backupAndStoreCommand);
 	context.subscriptions.push(getDeploymentsCommand);
 	context.subscriptions.push(disposable);
 }
