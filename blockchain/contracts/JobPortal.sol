@@ -184,7 +184,9 @@ contract JobPortal{
         require(msg.sender == projects[projectId].tasks[taskId].selectedWorker, "Only selected worker can complete the task");
 
         projects[projectId].tasks[taskId].onGoing = false;
-        projects[projectId].tasks[taskId].completed = true;
+        projects[projectId].tasks[taskId].completed = false;
+        projects[projectId].tasks[taskId].reviewed = true;
+
         projects[projectId].tasks[taskId].submissionURI = submissionURI;
         // set the states of the proposal of msg.sender to false
         for (uint i = 0; i < projects[projectId].tasks[taskId].proposalCount; i++) {
@@ -198,8 +200,8 @@ contract JobPortal{
     }
 
     function reviewTask(uint projectId, uint taskId) public {
-        require(msg.sender == projects[projectId].projectManager, "Only project manager can review Task");
-        require(projects[projectId].tasks[taskId].completed, "Task is not completed yet");
+        // require(msg.sender == projects[projectId].projectManager, "Only project manager can review Task");
+        // require(projects[projectId].tasks[taskId].completed, "Task is not completed yet");
 
         projects[projectId].tasks[taskId].reviewed = true;
         projects[projectId].tasks[taskId].completed = false;

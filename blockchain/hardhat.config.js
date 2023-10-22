@@ -3,7 +3,7 @@ require("@nomicfoundation/hardhat-toolbox");
 /** @type import('hardhat/config').HardhatUserConfig */
 require("dotenv").config();
 
-const { API_URL, PRIVATE_KEY ,API_KEY } = process.env;
+const { API_URL, PRIVATE_KEY ,API_KEY,NEXT_PUBLIC_INFURA_PROJECT_ID } = process.env;
 
 
 // module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
-      chainId: 31337,
+      enableTransientStorage: true,
     },
     // polygonMumbai: {
     //   url: "https://rpc-mumbai.maticvigil.com",
@@ -33,8 +33,12 @@ module.exports = {
     //   gasPrice: 8000000000,
     // },
     goerli: {
-      url: `https://eth-goerli.g.alchemy.com/v2/${API_KEY}`,
+      url: `https://eth-goerli.g.alchemy.com/v2/_nXwz3kBbXsE0CUTlMU_osLTKowtqfrm`,
 			accounts: [PRIVATE_KEY],
+    },
+    rinkeby: {
+      url: `https://eth-rinkeby.alchemy.com/v2/kStD9pX8MI3csLDyUx1q-b6kNXuP0_Lj`,
+      accounts: [PRIVATE_KEY],
     },
   },
   // etherscan: {
