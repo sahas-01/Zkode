@@ -34,7 +34,11 @@ module.exports = {
     // },
     goerli: {
       url: `https://eth-goerli.g.alchemy.com/v2/${API_KEY}`,
-			accounts: [PRIVATE_KEY],
+      accounts: [PRIVATE_KEY],
+    },
+    scrollSepolia: {
+      url: "https://sepolia-rpc.scroll.io/" || "",
+      accounts: [PRIVATE_KEY],
     },
   },
   // etherscan: {
