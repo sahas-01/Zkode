@@ -6,6 +6,12 @@ Kaamify is a cutting-edge platform that leverages decentralization to provide a 
 
 Kaamify is a groundbreaking platform that harnesses the power of decentralization to revolutionize work verification and project deployment. While rooted in the realm of freelancing, Kaamify's primary mission is to establish a trustless ecosystem where work is only paid for when it meets predefined standards, eliminating concerns over payment security. This innovative platform substantially reduces intermediary fees, provides transparency through blockchain technology and smart contracts, streamlines project deployment via a VSCode plugin, fosters real-time communication, and ensures the reliable hosting of assets. Kaamify is designed to be censorship-resistant and globally accessible, setting new standards for the way freelancers and clients collaborate in a secure, cost-effective, and efficient environment.
 
+### Steps to use the project:
+
+<b>NOTE: Users must have metamask extension installed in their browsers</b>
+- Connect your wallet to the website
+- Make sure you are connected on the Goerli Testnet to view the entire project's functionality
+- Have sufficient funds on your wallet address, you can get funds from <a href="https://goerlifaucet.com/" target="_blank" rel="noreferrer">Goerli Testnet</a>
 
 ## Problem Solved
 
